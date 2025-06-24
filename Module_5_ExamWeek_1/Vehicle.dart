@@ -12,11 +12,3 @@ abstract class Vehicle {
   int get speed => _speed;
 
 } //Vehicle class
-
-class Car extends Vehicle {
-
-  move() {
-
-    print("The car is moving at $_speed km/h");
-  }
-}
