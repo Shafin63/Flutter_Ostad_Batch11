@@ -1,6 +1,7 @@
 main ()
 {
-  Map <String, String> person = { //Map <key, value>
+  Map <String, String> person =
+  { //Map <key, value>
     'name' : 'Shafin',
     'age' : '25',
     'address' : 'Chittagong',
