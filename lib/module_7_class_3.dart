@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FlutterClass2 extends StatelessWidget {
@@ -81,9 +80,9 @@ class FlutterClass2 extends StatelessWidget {
                 print("Time's up!!!");
               },
               icon: Icon(Icons.timer),
-              color: Colors.redAccent,
-              iconSize: 70,
-            ),
+      color: Colors.redAccent,
+      iconSize: 70,
+    ),
             GestureDetector(
               onTap: () {print("Clicked!");},
               child: Text(
