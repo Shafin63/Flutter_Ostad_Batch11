@@ -90,13 +90,12 @@ class Module8Class3Stack extends StatelessWidget {
                 right: 150,
                 // left: 150,
                 bottom: 10,
-                child: Text("Bangladesh", style: TextStyle(
+                child: Text("Distorted", style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),),
               ),
-
             ],
           )
         ],
