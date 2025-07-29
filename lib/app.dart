@@ -7,6 +7,8 @@ import 'package:flutter1/module_7_class_3.dart';
 
 import 'module 8/class_2_List_View.dart';
 import 'module 9/class_01.dart';
+import 'module 9/class_02.dart';
+import 'module_10_Project/module_10_assignment.dart';
 
 class MyApp extends StatelessWidget {
   MyApp ({super.key});
@@ -19,7 +21,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
       ),
       title: "Batch 11 Flutter",
-      home: Module9Class1(),
+      // home: Module9Class2(),
+      home: Module10Assignment(),
 
     );
 
