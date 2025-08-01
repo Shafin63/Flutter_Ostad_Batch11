@@ -17,12 +17,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.cyan,
-        // If you want the old Material 2 look, also set:
-        useMaterial3: false,
+        useMaterial3: false, // for old Material 2 look
       ),
       title: "Batch 11 Flutter",
-      home: Module9Class2(),
-      // home: Module10Assignment(),
+      // home: Module9Class2(),
+      home: Module10Assignment(),
 
     );
 
