@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter1/module%2011/class%203/widgets/AddWaterButton.dart';
 
@@ -11,7 +12,20 @@ class WaterTracker extends StatefulWidget {
 class _WaterTrackerState extends State<WaterTracker> {
   int currentInTake =0;
   final int goal = 5000;
+  Timer ? _time;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _time = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (currentInTake > 0){
+          currentInTake = (currentInTake-1).clamp(0, goal);
+        }
+      });
+    });
+  }
   void waterAdd(int amount){
     setState(() {
       currentInTake = (currentInTake + amount).clamp(0, goal);

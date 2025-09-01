@@ -10,6 +10,8 @@ import 'package:flutter1/module_7_class_3.dart';
 import 'module 11/class 3/water_tracker.dart';
 import 'module 11/module_11_class_1.dart';
 import 'module 11/class 2/module_11_class_2.dart';
+import 'module 12/module 12_class 1.dart';
+import 'module 13/Product_List_API_Project/product_list_screen.dart';
 import 'module 8/class_2_List_View.dart';
 import 'module 9/class_01.dart';
 import 'module 9/class_02.dart';
@@ -23,7 +25,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: false, // for old Material 2 look
+        colorSchemeSeed: Colors.teal
+        // useMaterial3: false, // for old Material 2 look
 
         // appBarTheme: AppBarTheme(
         //     color: Colors.teal.shade300,
@@ -32,22 +35,22 @@ class MyApp extends StatelessWidget {
         // ),
         // primarySwatch: Colors.teal,
         // scaffoldBackgroundColor: Colors.teal.shade400,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            textStyle: TextStyle(fontSize: 30),
-            backgroundColor: Colors.teal.shade900,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
-          ),
+        // elevatedButtonTheme: ElevatedButtonThemeData(
+        //   style: ElevatedButton.styleFrom(
+        //     textStyle: TextStyle(fontSize: 30),
+        //     backgroundColor: Colors.teal.shade900,
+        //     foregroundColor: Colors.white,
+        //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+        //   ),
         ),
         // textTheme: TextTheme(
         //   headlineLarge: TextStyle(fontSize: 35)
         // ),
 
-      ),
+      // ),
       title: "Batch 11 Flutter",
       // home: CounterApp(),
-      home: WaterTracker(),
+      home: ProductListScreen(),
 
 
       // initialRoute: "/class3",
