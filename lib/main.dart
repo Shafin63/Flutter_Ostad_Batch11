@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:state_management_with_provider/counter_controller.dart';
+import 'package:state_management_with_provider/counter_controller_inheritied_widget.dart';
 import 'package:state_management_with_provider/counter_inherited_widget.dart';
 import 'package:state_management_with_provider/counter_notifier.dart';
 import 'package:state_management_with_provider/screens/home_screen.dart';
@@ -16,11 +18,12 @@ class StateManagementApp extends StatefulWidget {
 
 class _StateManagementAppState extends State<StateManagementApp> {
   // int counter = 0;
+  CounterController counterController = CounterController();
 
   @override
   Widget build(BuildContext context) {
-    return CounterInheritedWidget(
-      counterNotifier: CounterNotifier(),
+    return CounterControllerInheritedWidget(
+      counterController: counterController,
       child: MaterialApp(
         title: "State Management App",
         theme: ThemeData(
