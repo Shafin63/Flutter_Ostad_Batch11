@@ -1,57 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:state_management_with_provider/counter_controller.dart';
-import 'package:state_management_with_provider/counter_controller_inheritied_widget.dart';
-import 'package:state_management_with_provider/counter_inherited_widget.dart';
-import 'package:state_management_with_provider/counter_notifier.dart';
-import 'package:state_management_with_provider/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:state_management_with_provider/product_list_provider.dart';
+import 'package:state_management_with_provider/product_list_screen.dart';
 
 void main() {
-  runApp(const StateManagementApp());
+  runApp(ProductListApp());
 }
 
-class StateManagementApp extends StatefulWidget {
-  const StateManagementApp({super.key});
-
-  @override
-  State<StateManagementApp> createState() => _StateManagementAppState();
-}
-
-class _StateManagementAppState extends State<StateManagementApp> {
-  // int counter = 0;
-  CounterController counterController = CounterController();
+class ProductListApp extends StatelessWidget {
+  const ProductListApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CounterControllerInheritedWidget(
-      counterController: counterController,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProductListProvider(),)
+      ],
       child: MaterialApp(
-        title: "State Management App",
-        theme: ThemeData(
-          colorSchemeSeed: Colors.green,
-          textTheme: TextTheme(
-            titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            hintStyle: TextStyle(color: Colors.grey),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16),
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-            errorBorder: OutlineInputBorder(borderSide: BorderSide.none),
-          ),
-          filledButtonTheme: FilledButtonThemeData(
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.green,
-              fixedSize: Size.fromWidth(double.maxFinite),
-              padding: EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-        home: const HomeScreen(),
+        home: ProductListScreen(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
