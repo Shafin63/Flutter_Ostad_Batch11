@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:state_management_with_provider/cart_list_screen.dart';
 import 'package:state_management_with_provider/product.dart';
 import 'package:state_management_with_provider/product_list_provider.dart';
 
@@ -17,18 +18,21 @@ class _ProductListScreenState extends State<ProductListScreen> {
       appBar: AppBar(
         title: Text("Product List"),
         actions: [
-          Consumer <ProductListProvider>(
-            builder: (context, provider,_) {
+          Consumer<ProductListProvider>(
+            builder: (context, provider, _) {
               return Badge(
-                label: Text(
-                  provider.cartItemCount.toString(),
-                ),
+                label: Text(provider.cartItemCount.toString()),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CartListScreen()),
+                    );
+                  },
                   icon: Icon(Icons.shopping_cart),
                 ),
               );
-            }
+            },
           ),
         ],
       ),
@@ -41,6 +45,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
             itemBuilder: (context, index) {
               final Product product = productListProvider.productList[index];
+              final bool alreadyInCart = context
+                  .read<ProductListProvider>()
+                  .isAlreadyInCart(product.id);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -49,22 +56,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Image.network(
-                          product.imageUrl,
-                          height: 75,
-                        ),
+                        Image.network(product.imageUrl, height: 75),
                         Text(product.name),
                         Text("${product.price}"),
                         FilledButton(
                           onPressed: () {
-                            context.read<ProductListProvider>().addToCart(product);
+                            if (alreadyInCart) {
+                              context
+                                  .read<ProductListProvider>()
+                                  .removeFromCart(product.id);
+                            } else {
+                              context.read<ProductListProvider>().addToCart(
+                                product,
+                              );
+                            }
                           },
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all(
                               Colors.green[600],
                             ),
                           ),
-                          child: Text("Add to Cart"),
+                          child: Text(alreadyInCart ? "Remove" : "Add to Cart"),
                         ),
                       ],
                     ),
