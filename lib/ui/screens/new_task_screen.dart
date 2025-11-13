@@ -23,13 +23,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskStatusCountInProgress = false;
   List<taskStatusCountModel> _taskStatusCountList = [];
 
-  NewTaskListProvider _newTaskListProvider = NewTaskListProvider();
-
   @override
   void initState() {
     super.initState();
     _getAllTaskStatusCount();
-    _newTaskListProvider.getNewTasks();
+    context.read<NewTaskListProvider>().getNewTasks();
   }
 
   Future<void> _getAllTaskStatusCount() async {
@@ -53,68 +51,65 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => _newTaskListProvider,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              SizedBox(height: 16),
-              SizedBox(
-                height: 90,
-                child: Visibility(
-                  visible: _getTaskStatusCountInProgress == false,
-                  replacement: CenteredProgressIndicator(),
-                  child: ListView.separated(
-                    itemCount: _taskStatusCountList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return TaskCountByStatusCard(
-                        title: _taskStatusCountList[index].status,
-                        count: _taskStatusCountList[index].count,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(width: 6);
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Consumer<NewTaskListProvider>(
-                  builder: (context, newTaskListProvider, _) {
-                    return Visibility(
-                      visible:
-                          newTaskListProvider.getNewTaskInProgress == false,
-                      replacement: CenteredProgressIndicator(),
-                      child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return TaskCard(
-                            // taskStatusType: 'New',
-                            // color: Colors.blue,
-                            taskModel: newTaskListProvider.newTaskList[index],
-                            refreshParent: () {
-                              newTaskListProvider.getNewTasks();
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(height: 10);
-                        },
-                        itemCount: newTaskListProvider.newTaskList.length,
-                      ),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            SizedBox(height: 16),
+            SizedBox(
+              height: 90,
+              child: Visibility(
+                visible: _getTaskStatusCountInProgress == false,
+                replacement: CenteredProgressIndicator(),
+                child: ListView.separated(
+                  itemCount: _taskStatusCountList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return TaskCountByStatusCard(
+                      title: _taskStatusCountList[index].status,
+                      count: _taskStatusCountList[index].count,
                     );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(width: 6);
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: Consumer<NewTaskListProvider>(
+                builder: (context, newTaskListProvider, _) {
+                  return Visibility(
+                    visible:
+                        newTaskListProvider.getNewTaskInProgress == false,
+                    replacement: CenteredProgressIndicator(),
+                    child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return TaskCard(
+                          // taskStatusType: 'New',
+                          // color: Colors.blue,
+                          taskModel: newTaskListProvider.newTaskList[index],
+                          refreshParent: () {
+                            context.read<NewTaskListProvider>().getNewTasks();
+                          },
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 10);
+                      },
+                      itemCount: newTaskListProvider.newTaskList.length,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _onTapAddNewTaskButton,
-          child: Icon(Icons.add),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onTapAddNewTaskButton,
+        child: Icon(Icons.add),
       ),
     );
   }
