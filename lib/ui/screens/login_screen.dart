@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final LoginProvider _loginProvider = LoginProvider();
   @override
   Widget build(BuildContext context) {
-    return Provider(
+    return ChangeNotifierProvider(
       create: (_) => _loginProvider,
       child: Scaffold(
         body: ScreenBackground(

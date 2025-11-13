@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_manager2/data/models/task_model.dart';
 import 'package:task_manager2/data/models/task_status_count_model.dart';
 import 'package:task_manager2/data/services/api_caller.dart';
 import 'package:task_manager2/data/utils/urls.dart';
+import 'package:task_manager2/ui/controllers/new_task_list_provider.dart';
 import 'package:task_manager2/ui/screens/add_new_task_screen.dart';
 import 'package:task_manager2/ui/widgets/centered_circular_progress_indicator.dart';
 import 'package:task_manager2/ui/widgets/snack_bar_message.dart';
@@ -19,15 +21,15 @@ class NewTaskScreen extends StatefulWidget {
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskStatusCountInProgress = false;
-  bool _getNewTaskInProgress = false;
   List<taskStatusCountModel> _taskStatusCountList = [];
-  List<TaskModel> _newTaskList = [];
+
+  NewTaskListProvider _newTaskListProvider = NewTaskListProvider();
 
   @override
   void initState() {
     super.initState();
     _getAllTaskStatusCount();
-    _getAllNewTasks();
+    _newTaskListProvider.getNewTasks();
   }
 
   Future<void> _getAllTaskStatusCount() async {
@@ -49,80 +51,70 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     setState(() {});
   }
 
-  Future<void> _getAllNewTasks() async {
-    _getNewTaskInProgress = true;
-    setState(() {});
-    final ApiResponse response = await ApiCaller.getRequest(
-      url: urls.newTasklistUrl,
-    );
-    if (response.isSuccess) {
-      List<TaskModel> newTasklist = [];
-      for (Map<String, dynamic> jsonData in response.responseData["data"]) {
-        newTasklist.add(TaskModel.fromJson(jsonData));
-      }
-      _newTaskList = newTasklist;
-    } else {
-      return showSnackBarMessage(context, response.errorMessage!);
-    }
-    _getNewTaskInProgress = false;
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            SizedBox(height: 16),
-            SizedBox(
-              height: 90,
-              child: Visibility(
-                visible: _getTaskStatusCountInProgress == false,
-                replacement: CenteredProgressIndicator(),
-                child: ListView.separated(
-                  itemCount: _taskStatusCountList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return TaskCountByStatusCard(
-                      title: _taskStatusCountList[index].status,
-                      count: _taskStatusCountList[index].count,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(width: 6);
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: Visibility(
-                visible: _getNewTaskInProgress == false,
-                replacement: CenteredProgressIndicator(),
-                child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return TaskCard(
-                      // taskStatusType: 'New',
-                      // color: Colors.blue,
-                      taskModel: _newTaskList[index], refreshParent: () {
-                        _getAllNewTasks();
+    return ChangeNotifierProvider(
+      create: (_) => _newTaskListProvider,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              SizedBox(height: 16),
+              SizedBox(
+                height: 90,
+                child: Visibility(
+                  visible: _getTaskStatusCountInProgress == false,
+                  replacement: CenteredProgressIndicator(),
+                  child: ListView.separated(
+                    itemCount: _taskStatusCountList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return TaskCountByStatusCard(
+                        title: _taskStatusCountList[index].status,
+                        count: _taskStatusCountList[index].count,
+                      );
                     },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 10);
-                  },
-                  itemCount: _newTaskList.length,
+                    separatorBuilder: (context, index) {
+                      return SizedBox(width: 6);
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Consumer<NewTaskListProvider>(
+                  builder: (context, newTaskListProvider, _) {
+                    return Visibility(
+                      visible:
+                          newTaskListProvider.getNewTaskInProgress == false,
+                      replacement: CenteredProgressIndicator(),
+                      child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return TaskCard(
+                            // taskStatusType: 'New',
+                            // color: Colors.blue,
+                            taskModel: newTaskListProvider.newTaskList[index],
+                            refreshParent: () {
+                              newTaskListProvider.getNewTasks();
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(height: 10);
+                        },
+                        itemCount: newTaskListProvider.newTaskList.length,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onTapAddNewTaskButton,
-        child: Icon(Icons.add),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _onTapAddNewTaskButton,
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }

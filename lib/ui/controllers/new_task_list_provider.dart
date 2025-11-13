@@ -22,11 +22,11 @@ class NewTaskListProvider extends ChangeNotifier {
       url: urls.newTasklistUrl,
     );
     if (response.isSuccess) {
-      List<TaskModel> newTasklist = [];
+      List<TaskModel> list = [];
       for (Map<String, dynamic> jsonData in response.responseData["data"]) {
-        _newTaskList.add(TaskModel.fromJson(jsonData));
+        list.add(TaskModel.fromJson(jsonData));
       }
-      _newTaskList = newTasklist;
+      _newTaskList = list;
       isSuccess = true;
     } else {
       _errorMessage = response.errorMessage!;
