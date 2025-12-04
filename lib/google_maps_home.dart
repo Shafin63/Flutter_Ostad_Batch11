@@ -12,6 +12,41 @@ class _GoogleMapsHomeState extends State<GoogleMapsHome> {
   @override
   Widget build(BuildContext context) {
     late GoogleMapController _mapController;
+    Set<Marker> _markers = <Marker>{
+      Marker(
+        markerId: MarkerId("office"),
+        position: LatLng(22.35709078251976, 91.84002824127674),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+        onTap: () {
+          print("tapped on Bali Arcade Market");
+        },
+        infoWindow: InfoWindow(title: "Marker title", onTap: () {}),
+        draggable: true,
+        onDragStart: (LatLng startLatLng) {
+          print("Drag start: $startLatLng");
+        },
+        onDragEnd: (LatLng endLatLng) {
+          print("Drag End: $endLatLng");
+        },
+      ),
+
+      Marker(
+        markerId: MarkerId("PizzaBurg"),
+        position: LatLng(22.343805036772345, 91.83501183986664),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+        onTap: () {
+          print("tapped on PizzaBurg Chittagong");
+        },
+        infoWindow: InfoWindow(title: "Marker title", onTap: () {}),
+        draggable: true,
+        onDragStart: (LatLng startLatLng) {
+          print("Drag start: $startLatLng");
+        },
+        onDragEnd: (LatLng endLatLng) {
+          print("Drag End: $endLatLng");
+        },
+      ),
+    };
     return Scaffold(
       appBar: AppBar(title: Text("Google Map")),
       body: GoogleMap(
@@ -31,26 +66,7 @@ class _GoogleMapsHomeState extends State<GoogleMapsHome> {
         onMapCreated: (GoogleMapController controller) {
           _mapController = controller;
         },
-        markers: <Marker>{
-          Marker(
-            markerId: MarkerId("office"),
-            position: LatLng(22.35709078251976, 91.84002824127674),
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueAzure,
-            ),
-            onTap: () {
-              print("tapped on Bali Arcade Market");
-            },
-            infoWindow: InfoWindow(title: "Marker title", onTap: () {}),
-            draggable: true,
-            onDragStart: (LatLng startLatLng) {
-              print("Drag start: $startLatLng");
-            },
-            onDragEnd: (LatLng endLatLng) {
-              print("Drag End: $endLatLng");
-            },
-          ),
-        },
+        markers: _markers,
         circles: <Circle>{
           Circle(
             circleId: CircleId("my home address"),
@@ -91,11 +107,11 @@ class _GoogleMapsHomeState extends State<GoogleMapsHome> {
             startCap: Cap.roundCap,
             endCap: Cap.roundCap,
             width: 4,
-            onTap: (){},
+            onTap: () {},
             consumeTapEvents: true,
           ),
         },
-        polygons: <Polygon> {
+        polygons: <Polygon>{
           Polygon(
             polygonId: PolygonId("random-polygon"),
             points: [
@@ -111,6 +127,37 @@ class _GoogleMapsHomeState extends State<GoogleMapsHome> {
             consumeTapEvents: true,
           ),
         },
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              _mapController.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(22.351792760674126, 91.82857923209667),
+                    zoom: 16,
+                  ),
+                ),
+              );
+            },
+            child: Icon(Icons.factory_outlined),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              _mapController.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(22.387464780245853, 91.82509068399668),
+                    zoom: 15,
+                  ),
+                ),
+              );
+            },
+            child: Icon(Icons.home),
+          ),
+        ],
       ),
     );
   }
