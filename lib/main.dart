@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps/google_maps_home.dart';
+import 'package:google_maps/gps_homescreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const GoogleMapsHome(),
+      home: const GpsHomescreen(),
     );
   }
 }
